@@ -1,0 +1,24 @@
+{
+    "name": "laralum/social",
+    "description": "Social module for laralum",
+    "require": {
+        "laralum/laralum": "1.*",
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Erik Campobadal",
+            "email": "soc@erik.cat"
+        },
+        {
+            "name": "Aitor Riba",
+            "email": "contact@aitorriba.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Laralum\\Social\\": "./src"
+        }
+    },
+    "minimum-stability": "dev"
+}
