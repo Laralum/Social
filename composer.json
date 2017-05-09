@@ -2,7 +2,7 @@
     "name": "laralum/social",
     "description": "Social module for laralum",
     "require": {
-        "laralum/laralum": "1.*",
+        "laralum/laralum": "1.*"
     },
     "license": "MIT",
     "authors": [
