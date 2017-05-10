@@ -174,9 +174,17 @@ class SocialController extends Controller
         ]]);
     }
 
+    /**
+     * Registers the social account
+     *
+     * @param  string $provider
+     * @param  mixed $user
+     * @param  \Laralum\Users\Models\User $dbuser
+     * @return boolean
+     */
     private function registerSocial($provider, $user, $dbuser = null)
     {
-        Social::create([
+        return Social::create([
             'user_id' => $dbuser ? $dbuser->id : Auth::user()->id,
             'provider' => $provider,
             'token' => $user->token,
