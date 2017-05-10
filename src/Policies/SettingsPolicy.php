@@ -23,19 +23,6 @@ class SettingsPolicy
     }
 
     /**
-     * The mandatory permissions for the module.
-     *
-     * @var array
-     */
-    protected $permissions = [
-        [
-            'name' => 'Update Social Settings',
-            'slug' => 'laralum::social.settings',
-            'desc' => 'Allows updating the social settings',
-        ],
-    ];
-
-    /**
      * Determine if the current user can update the general settings.
      *
      * @param mixed $user
