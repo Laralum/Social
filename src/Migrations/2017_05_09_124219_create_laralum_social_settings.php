@@ -14,9 +14,10 @@ class CreateLaralumSocialSettings extends Migration
      */
     public function up()
     {
-        Schema::create('laralum_settings', function (Blueprint $table) {
+        Schema::create('laralum_social_settings', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('enabled');
+            $table->boolean('allow_register');
             $table->text('facebook_client_id')->nullable();
             $table->text('facebook_client_secret')->nullable();
             $table->text('twitter_client_id')->nullable();
@@ -33,7 +34,8 @@ class CreateLaralumSocialSettings extends Migration
         });
 
         Settings::create([
-            'enabled'     => false,
+            'enabled' => false,
+            'allow_register' => false,
         ]);
     }
 
@@ -44,6 +46,6 @@ class CreateLaralumSocialSettings extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('laralum_settings');
+        Schema::dropIfExists('laralum_social_settings');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Laralum\Settings\Models;
+namespace Laralum\Social\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,6 +8,7 @@ class Settings extends Model
 {
     public $table = 'laralum_social_settings';
     public $fillable = [
+        'enabled', 'allow_register',
         'facebook_client_id', 'facebook_client_secret',
         'twitter_client_id', 'twitter_client_secret',
         'linkedin_client_id', 'linkedin_client_secret',
