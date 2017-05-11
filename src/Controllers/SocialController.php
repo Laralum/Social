@@ -84,7 +84,7 @@ class SocialController extends Controller
                 $dbuser = new User;
                 $dbuser->name = $user->getName();
                 $dbuser->email = $user->getEmail();
-                $db->save();
+                $dbuser->save();
 
                 $this->registerSocial($provider, $user, $dbuser);
 
