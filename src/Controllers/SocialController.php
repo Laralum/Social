@@ -12,8 +12,16 @@ use Auth;
 
 class SocialController extends Controller
 {
+    /**
+     * Stores the social settings.
+     *
+     * @var \Laralum\Social\Models\Social
+     */
     private $settings;
 
+    /**
+     * Controller constructor.
+     */
     public function __construct()
     {
         $this->settings = Settings::first();
@@ -48,6 +56,9 @@ class SocialController extends Controller
 
         $this->setConfig($provider);
 
+        $user = User::findOrFail(Auth::id());
+        $redirectAfter = $user->hasPermission('laralum::access') || $user->superAdmin() ? route('laralum::social.integrations') : url('/');
+
         $user = Socialite::driver($provider)->user();
 
         if (Auth::check()) {
@@ -55,9 +66,9 @@ class SocialController extends Controller
 
                 $this->registerSocial($provider, $user);
 
-                return redirect('/')->with('success', __('laralum_social::general.provider_linked', ['provider' => $provider]));
+                return redirect($redirectAfter)->with('success', __('laralum_social::general.provider_linked', ['provider' => $provider]));
             }
-            return redirect('/')->with('error', __('laralum_social::general.provider_already_linked', ['provider' => $provider]));
+            return redirect($redirectAfter)->with('error', __('laralum_social::general.provider_already_linked', ['provider' => $provider]));
         }
 
         if ($user->getEmail() && $user->getName()) {
@@ -68,7 +79,7 @@ class SocialController extends Controller
 
                 Auth::login($dbuser);
 
-                return redirect('/')->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
+                return redirect($redirectAfter)->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
 
             } elseif ($dbuser) {
                 // User found but no social set - Setup the social & Force Login
@@ -76,11 +87,12 @@ class SocialController extends Controller
 
                 Auth::login($dbuser);
 
-                return redirect('/')->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
+                return redirect($redirectAfter)->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
 
 
             } elseif (!$dbuser && $this->settings->allow_register) {
                 // No user found and registers enabled - Register user, social & login
+                /*
                 $dbuser = new User;
                 $dbuser->name = $user->getName();
                 $dbuser->email = $user->getEmail();
@@ -89,8 +101,11 @@ class SocialController extends Controller
                 $this->registerSocial($provider, $user, $dbuser);
 
                 Auth::login($dbuser);
+                */
 
-                return redirect('/')->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
+                abort(403, 'Feature not yet done');
+
+                return redirect($redirectAfter)->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
 
             }
 
@@ -99,6 +114,37 @@ class SocialController extends Controller
         }
 
         abort(403, 'The provider did not return a valid email or name to register the user');
+    }
+
+    public function integrations()
+    {
+        $providers = Social::availableProviders();
+
+        return view('laralum_social::integrations', ['providers' => $providers]);
+    }
+
+    /**
+     * Unlink the social account.
+     *
+     * @param  string $provider
+     * @return Response
+     */
+    public function unlink($provider)
+    {
+        $this->checkDisabled();
+
+        $user = User::findOrFail(Auth::id());
+        $redirectAfter = $user->hasPermission('laralum::access') || $user->superAdmin() ? route('laralum::social.integrations') : url('/');
+
+        $link = Social::where(['user_id' => Auth::id(), 'provider' => $provider])->first();
+
+        if (!$link) {
+            return redirect($redirectAfter)->with('success', __('laralum_social::general.link_not_found', ['provider' => $provider]));
+        }
+
+        $link->delete();
+
+        return redirect($redirectAfter)->with('success', __('laralum_social::general.unlinked', ['provider' => $provider]));
     }
 
     /**
@@ -112,7 +158,7 @@ class SocialController extends Controller
 
         $this->settings->update([
             'enabled' => $request->enabled ? true : false,
-            'allow_register' => $request->allow_register ? true : false,
+            'allow_register' => $request->allow_register ? false : false, // Not enabled yet
             'facebook_client_id' => $request->facebook_client_id ? encrypt($request->facebook_client_id) : null,
             'facebook_client_secret' => $request->facebook_client_secret ? encrypt($request->facebook_client_secret) : null,
             'twitter_client_id' => $request->twitter_client_id ? encrypt($request->twitter_client_id) : null,

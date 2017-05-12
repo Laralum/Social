@@ -22,6 +22,13 @@ return [
     'provider_linked'           => 'Your :provider account has been linked!',
     'provider_already_linked'   => 'Your :provider account is already linked!',
     'logged_in'                 => 'You have logged in using :provider',
+    'social_integrations'       => 'Social Integrations',
+    'already_linked'            => 'Linked :date',
+    'not_linked'                => 'Not Linked',
+    'unlink'                    => 'Unlink :provider',
+    'unlinked'                  => 'Unlinked :provider',
+    'link_not_found'            => 'No social link found with :provider',
+    'home'                      => 'Home',
 
     'unauthorized_action'       => 'Unauthorized Action',
     'unauthorized_desc'         => "You're not allowed to update the general settings.",

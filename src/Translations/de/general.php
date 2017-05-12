@@ -22,6 +22,7 @@ return [
     'provider_linked'           => 'Dein :provider Account wurde verlinkt!',
     'provider_already_linked'   => 'Dein :provider Account ist bereits verlinkt!',
     'logged_in'                 => 'Du hast dich mit :provider eingeloggt',
+    'social_integration'        => 'Soziale Integration',
 
     'unauthorized_action'       => 'Unautorisierte  Aktion',
     'unauthorized_desc'         => "Du hast nicht die Berechtigung um die Einstellungen zu aktualisieren.",

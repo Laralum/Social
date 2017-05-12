@@ -20,7 +20,7 @@
                     <div class="uk-margin">
                         <label class="uk-form-label">@lang('laralum_social::general.allow_register')</label>
                         <div class="uk-form-controls">
-                            <label><input name="allow_register" @if($settings->allow_register) checked @endif class="uk-checkbox" type="checkbox"> @lang('laralum_social::general.allow_register')</label><br />
+                            <label><input disabled name="allow_register" @if($settings->allow_register) checked @endif class="uk-checkbox" type="checkbox"> @lang('laralum_social::general.allow_register')</label><br />
                             <small class="uk-text-meta">@lang('laralum_social::general.allow_register_hp')</small>
                         </div>
                     </div>
