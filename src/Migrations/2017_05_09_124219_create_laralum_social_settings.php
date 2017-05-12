@@ -34,7 +34,7 @@ class CreateLaralumSocialSettings extends Migration
         });
 
         Settings::create([
-            'enabled' => false,
+            'enabled'        => false,
             'allow_register' => false,
         ]);
     }
