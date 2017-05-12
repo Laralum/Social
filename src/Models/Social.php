@@ -13,7 +13,7 @@ class Social extends Model
     ];
 
     /**
-     * Return the user from the social account
+     * Return the user from the social account.
      *
      * @return \Laralum\Users\Moodels\User;
      */
@@ -23,7 +23,7 @@ class Social extends Model
     }
 
     /**
-     * Return all the providers supported
+     * Return all the providers supported.
      *
      * @return array
      */
@@ -37,7 +37,7 @@ class Social extends Model
     }
 
     /**
-     * Returns all the available providers
+     * Returns all the available providers.
      *
      * @return array
      */
@@ -46,8 +46,9 @@ class Social extends Model
         $settings = Settings::first();
 
         return collect(static::providers())->filter(function ($value) use ($settings) {
-            $ci = $value . "_client_id";
-            $cs = $value . "_client_secret";
+            $ci = $value.'_client_id';
+            $cs = $value.'_client_secret';
+
             return $settings->$ci && $settings->$cs;
         })->toArray();
     }

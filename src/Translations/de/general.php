@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'provider_not_found'        => "Der Provider :provider wurde nicht gefunden oder wurde noch nicht eingerichtet.",
+    'provider_not_found'        => 'Der Provider :provider wurde nicht gefunden oder wurde noch nicht eingerichtet.',
     'social_disabled'           => 'Das Social Feature ist deaktiviert.',
     'updated_settings'          => 'Die Einstellungen wurden aktualisiert.',
     'enabled'                   => 'Aktiviert',
@@ -25,6 +25,6 @@ return [
     'social_integration'        => 'Soziale Integration',
 
     'unauthorized_action'       => 'Unautorisierte  Aktion',
-    'unauthorized_desc'         => "Du hast nicht die Berechtigung um die Einstellungen zu aktualisieren.",
+    'unauthorized_desc'         => 'Du hast nicht die Berechtigung um die Einstellungen zu aktualisieren.',
     'contact_webmaster'         => 'Solltest du die Einstellungen bearbeiten müssen, wende dich an einen Administrator.',
 ];

@@ -10,7 +10,6 @@ use Laralum\Social\Policies\SettingsPolicy;
 
 class SocialServiceProvider extends ServiceProvider
 {
-
     /**
      * The policy mappings for the application.
      *
