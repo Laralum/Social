@@ -9,7 +9,7 @@ class Social extends Model
 {
     public $table = 'laralum_social';
     public $fillable = [
-        'user_id', 'provider', 'token', 'secret_token',
+        'user_id', 'provider', 'token', 'secret_token', 'email',
     ];
 
     /**

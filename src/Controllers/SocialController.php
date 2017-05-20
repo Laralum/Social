@@ -56,53 +56,34 @@ class SocialController extends Controller
 
         $this->setConfig($provider);
 
-        $user = User::findOrFail(Auth::id());
-        $redirectAfter = $user->hasPermission('laralum::access') || $user->superAdmin() ? route('laralum::social.integrations') : url('/');
+        $user = User::find(Auth::id());
+
+        $redirectAfter = url('/');
+
+        if ($user) {
+            $redirectAfter = !($user->hasPermission('laralum::access') || $user->superAdmin()) ?: route('laralum::social.integrations');
+        }
 
         $user = Socialite::driver($provider)->user();
 
-        if (Auth::check()) {
-            if (!Social::where(['user_id' => Auth::id(), 'provider' => $provider])->first()) {
-                $this->registerSocial($provider, $user);
+        if ($user->getEmail() && $user->getName()) {
 
-                return redirect($redirectAfter)->with('success', __('laralum_social::general.provider_linked', ['provider' => $provider]));
+            if (Auth::check()) {
+                if (!Social::where(['user_id' => Auth::id(), 'provider' => $provider])->first()) {
+                    $this->registerSocial($provider, $user);
+
+                    return redirect($redirectAfter)->with('success', __('laralum_social::general.provider_linked', ['provider' => $provider]));
+                }
+
+                return redirect($redirectAfter)->with('error', __('laralum_social::general.provider_already_linked', ['provider' => $provider]));
             }
 
-            return redirect($redirectAfter)->with('error', __('laralum_social::general.provider_already_linked', ['provider' => $provider]));
-        }
+            $sa = Social::where(['email' => $user->getEmail(), 'provider' => $provider])->first();
 
-        if ($user->getEmail() && $user->getName()) {
-            $dbuser = User::where('email', $user->getEmail())->first();
+            if ($sa) {
+                Auth::login($sa->user);
 
-            if ($dbuser && Social::where(['user_id' => $dbuser->id, 'provider' => $provider])->first()) {
-                // User found and social already set - Force login
-
-                Auth::login($dbuser);
-
-                return redirect($redirectAfter)->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
-            } elseif ($dbuser) {
-                // User found but no social set - Setup the social & Force Login
-                $this->registerSocial($provider, $user, $dbuser);
-
-                Auth::login($dbuser);
-
-                return redirect($redirectAfter)->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
-            } elseif (!$dbuser && $this->settings->allow_register) {
-                // No user found and registers enabled - Register user, social & login
-                /*
-                $dbuser = new User;
-                $dbuser->name = $user->getName();
-                $dbuser->email = $user->getEmail();
-                $dbuser->save();
-
-                $this->registerSocial($provider, $user, $dbuser);
-
-                Auth::login($dbuser);
-                */
-
-                abort(403, 'Feature not yet done');
-
-                return redirect($redirectAfter)->with('success', __('laralum_social::general.logged_in', ['provider' => $Provider]));
+                return redirect($redirectAfter)->with('success', __('laralum_social::general.logged_in', ['provider' => $provider]));
             }
 
             abort(403, 'Registrations are not allowed');
@@ -232,6 +213,7 @@ class SocialController extends Controller
             'provider'     => $provider,
             'token'        => $user->token,
             'secret_token' => isset($user->tokenSecret) ? $user->tokenSecret : null,
+            'email'        => $user->getEmail(),
         ]);
     }
 }
