@@ -67,7 +67,6 @@ class SocialController extends Controller
         $user = Socialite::driver($provider)->user();
 
         if ($user->getEmail() && $user->getName()) {
-
             if (Auth::check()) {
                 if (!Social::where(['user_id' => Auth::id(), 'provider' => $provider])->first()) {
                     $this->registerSocial($provider, $user);
