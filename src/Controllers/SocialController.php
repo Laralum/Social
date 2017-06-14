@@ -85,7 +85,7 @@ class SocialController extends Controller
                 return redirect($redirectAfter)->with('success', __('laralum_social::general.logged_in', ['provider' => $provider]));
             }
 
-            abort(403, 'Registrations are not allowed');
+            abort(403, 'Registrations are not allowed using the social feature');
         }
 
         abort(403, 'The provider did not return a valid email or name to register the user');
